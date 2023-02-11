@@ -9,12 +9,12 @@ from .models import Post
 def index(request):
     posts = []
     for post in Post.objects.order_by('-pub_date'):
-        posts.append({'title': post.get_name(), 'author_id': str(post.get_author()), 'created': post.get_date(), 'body': post.get_body(), 'id': post})
+        posts.append({'title': post.get_name(), 'author_id': str(post.get_author()), 'created': post.get_date(), 'body': post.get_body(), 'id': post.get_id()})
     return render(request, 'home.html', {'posts': posts})
 def update(request, pk):
     post = request.POST
     if post != {}:
-        post_got = Post.objects.get(post_title=pk)
+        post_got = Post.objects.get(id=pk)
         post_got.post_title = post['title']
 
         post_got.post_body = post['body']
@@ -22,8 +22,8 @@ def update(request, pk):
 
         return HttpResponseRedirect('../..')
     else:
-        post_got = Post.objects.get(post_title=pk)
-        post_dat = {'title': post_got.get_name(), 'author_id': str(post_got.get_author()), 'created': post_got.get_date(), 'body': post_got.get_body()}
+        post_got = Post.objects.get(id=pk)
+        post_dat = {'title': post_got.get_name(), 'author_id': str(post_got.get_author()), 'created': post_got.get_date(), 'body': post_got.get_body(), 'id': post_got.get_id()}
         return render(request, 'update.html', {'post': post_dat})
 def create(request):
     post = request.POST
@@ -36,7 +36,6 @@ def create(request):
     else:
         return render(request, 'create.html')
 def delete(request, pk):
-    post = Post.objects.get(post_title=pk)
+    post = Post.objects.get(id=pk)
     post.delete()
-    post.save()
     return HttpResponseRedirect('../..')

@@ -9,6 +9,8 @@ class Post(models.Model):
     by = models.ForeignKey(User, on_delete=models.CASCADE)
     def __str__(self):
         return self.post_title
+    def get_id(self):
+        return self.id
     def get_body(self):
         return self.post_body
     def get_date(self):
