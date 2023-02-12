@@ -37,5 +37,6 @@ def create(request):
         return render(request, 'create.html')
 def delete(request, pk):
     post = Post.objects.get(id=pk)
-    post.delete()
+    if request.user == post.get_author():
+        post.delete()
     return HttpResponseRedirect('../..')
